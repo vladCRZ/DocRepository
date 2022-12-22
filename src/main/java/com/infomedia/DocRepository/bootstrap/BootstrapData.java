@@ -2,8 +2,10 @@ package com.infomedia.DocRepository.bootstrap;
 
 import com.infomedia.DocRepository.domain.Author;
 import com.infomedia.DocRepository.domain.Book;
+import com.infomedia.DocRepository.domain.Publisher;
 import com.infomedia.DocRepository.repositories.AuthorRepository;
 import com.infomedia.DocRepository.repositories.BookRepository;
+import com.infomedia.DocRepository.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +16,12 @@ public class BootstrapData implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
-    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository) {
+    private final PublisherRepository publisherRepository;
+
+    public BootstrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     @Override
@@ -52,7 +57,19 @@ public class BootstrapData implements CommandLineRunner {
         authorRepository.save(carlos);
         bookRepository.save(book3);
 
+
+        Publisher norma = new Publisher("Norma", "Fresnos #13", "68300");
+        publisherRepository.save(norma);
+
+
+        book1.setPublisher(norma);
+        norma.getBooks().add(book1);
+
+        bookRepository.save(book1);
+        publisherRepository.save(norma);
+
         System.out.println("Number of books = " + authorRepository.count());
+        System.out.println("Number of Publishers = " + publisherRepository.count());
 
 
 
